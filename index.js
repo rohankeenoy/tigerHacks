@@ -1,4 +1,5 @@
-var redirect_uri = "http://127.0.0.1:5500/mainPage.html"; 
+var redirect_uri = "http://127.0.0.1:5501/mainPage.html"; 
+
  
 
 var client_id= "ac4c395f13654db9a9ca2d9035edf3cb"; 
@@ -8,33 +9,18 @@ var access_token = null;
 var refresh_token = null;
 
 
-const AUTHORIZE = "https://accounts.spotify.com/authorize";
+const AUTHORIZE = "https://accounts.spotify.com/authorize"
 const TOKEN = "https://accounts.spotify.com/api/token";
 
-//variables for endpoints
-const topItems ="https://accounts.spotify.com/v1/me/top/tracks";
-// values for seeding
-var mode; 
-var travel;
-var shoe;
+//variables for playlist 
+const PLAYLISTS = "https://api.spotify.com/v1/me/playlists";
+const userTop = "https://api.spotify.com/v1/me/top/tracks";
+const recco = "https://api.spotify.com/v1/recommendations";
 
-// Assign variables the values of what is clicked. 
-function showValueM(val){
-    mode = val;
-    console.log(mode);
-}
-function showValueT(val){
-    travel = val;
-    console.log(travel);
-}
-//making sure the values get assigned right lol need this function to apply to all
-function showValueS(val){
-    shoe = val;
-    console.log(shoe);
-}
-
-
-
+//vars for playlist itself
+var seeds = [];
+var oneSeed;
+var recommendations = [];
 
 function onPageLoad(){
     client_id = localStorage.getItem("client_id");
@@ -46,20 +32,23 @@ function onPageLoad(){
     else{
         access_token = localStorage.getItem("access_token");
         if ( access_token == null ){
-            refreshAccessToken(); 
+            refreshAccessToken();
         }
         else {
-            top10();
+            //FUNCTIONS GO HERE
+            //have access token, function calls should go here.
+            userTopItems();
+            getRecommendations();
         }
+     
     }
+ 
 }
-
 function handleRedirect(){
     let code = getCode();
     fetchAccessToken( code );
     window.history.pushState("", "", redirect_uri); // remove param from url
 }
-
 function getCode(){
     let code = null;
     const queryString = window.location.search;
@@ -69,7 +58,6 @@ function getCode(){
     }
     return code;
 }
-
 function requestAuthorization(){
     localStorage.setItem("client_id", client_id);
     localStorage.setItem("client_secret", client_secret); 
@@ -79,10 +67,9 @@ function requestAuthorization(){
     url += "&response_type=code";
     url += "&redirect_uri=" + encodeURI(redirect_uri);
     url += "&show_dialog=true";
-    url += "&scope=user-read-private user-top-read user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private playlist-modify-public";
-    window.location.href = url;
+    url += "&scope=user-read-private user-top-read playlist-modify-public";
+    window.location.href = url; // Show Spotify's authorization screen
 }
-
 function fetchAccessToken( code ){
     let body = "grant_type=authorization_code";
     body += "&code=" + code; 
@@ -108,13 +95,85 @@ function callAuthorizationApi(body){
     xhr.send(body);
     xhr.onload = handleAuthorizationResponse;
 }
+
+function callApi(method, url, body, callback){
+    let xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+    xhr.send(body);
+    xhr.onload = callback;
+
+}
+//functions 
+function userTopItems(){
+    // get 3 top tracks for medium_term length for seed
+    let body = "limit=3"
+    callApi("GET", userTop , body, handleApiResponse)
+}
+
+function getRecommendations(){
+    //let body= oneSeed;
+    console.log(getRecommendations);
+    let body = "seedtracks="+seeds[0]+seeds[1]+seeds[2];
+    console.log(body);
+    callApi("GET", recco, body, handleRecommendations)
+}
+
+function createPlaylist(){
+    console.log("playlist");
+    //let body =
+    callApi("POST", PLAYLISTS, null, handleApiResponse);
+}
+function handleRecommendations(){
+    if ( this.status == 200){
+        //this is where we should handle our data
+        console.log(this.responseText);
+        var data = JSON.parse(this.responseText);
+        }
+    else if ( this.status == 401 ){
+        refreshAccessToken()
+    }
+    else {
+        console.log(this.responseText);
+        alert(this.responseText);
+    }    
+
+}
+
+function handleApiResponse(){
+    if ( this.status == 200){
+        //this is where we should handle our data
+        console.log(this.responseText);
+        var data = JSON.parse(this.responseText);
+        console.log("User top three items")
+        //parse data and add to string seeds for song seeds
+        for(let i =0; i <= 3; i++){
+            if(i<2){
+                seeds[i] = data.items[i].id+ ",";
+            }
+            else{
+                seeds[i]= data.items[i].id;
+            }
+
+        }
+        // add the contents of the array to one variable
+        oneSeed = seeds[0]+seeds[1]+seeds[2];
+        console.log(oneSeed);
+        //getRecommendations();
+        }
+    else if ( this.status == 401 ){
+        refreshAccessToken()
+    }
+    else {
+        console.log(this.responseText);
+        alert(this.responseText);
+    }    
+}
 function handleAuthorizationResponse(){
     if ( this.status == 200 ){
         var data = JSON.parse(this.responseText);
         console.log(data);
-
-
-        var data = JSON.parse(this.responseText);
         if ( data.access_token != undefined ){
             access_token = data.access_token;
             localStorage.setItem("access_token", access_token);
@@ -130,41 +189,28 @@ function handleAuthorizationResponse(){
         alert(this.responseText);
     }
 }
-
-function callApi(method, url, body, callback){
-    let xhr = new XMLHttpRequest();
-    xhr.open(method, url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-    xhr.send(body);
-    xhr.onload = callback;
-}
-
-
-// find songs based on seed values from quiz, we need to write it underneath the if condition
-
-function handleApiResponse(){
-    if ( this.status == 200){
-        console.log(this.responseText);
-        var data = JSON.parse(this.responseText)
-        console.log(data);
-        }
-    else if ( this.status == 401 ){
-        refreshAccessToken()
-    }
-    else {
-        console.log(this.responseText);
-        alert(this.responseText);
-    }    
-}
-// function for getting users top tracks using users-top-items end point
-function topItems(){
-    let body = {"limit": 20}
-    callApi("GET", url, body, handleApiResponse);
+function send(){
+    requestAuthorization();
 }
 
 
 
+/*// values for seeding
+var mode; 
+var travel;
+var shoe;
 
-
-
+// Assign variables the values of what is clicked. 
+function showValueM(val){
+    mode = val;
+    console.log(mode);
+}
+function showValueT(val){
+    travel = val;
+    console.log(travel);
+}
+//making sure the values get assigned right lol need this function to apply to all
+function showValueS(val){
+    shoe = val;
+    console.log(shoe);
+}*/
