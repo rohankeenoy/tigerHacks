@@ -1,5 +1,4 @@
-var redirect_uri = "http://127.0.0.1:5500/mainPage.html"; // change this your value, this is mine in VScode
-
+var redirect_uri = "http://127.0.0.1:5500/mainPage.html"; 
  
 
 var client_id= "ac4c395f13654db9a9ca2d9035edf3cb"; 
@@ -9,11 +8,31 @@ var access_token = null;
 var refresh_token = null;
 
 
-const AUTHORIZE = "https://accounts.spotify.com/authorize"
+const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN = "https://accounts.spotify.com/api/token";
 
-//variables for playlist 
-const PLAYLISTS = "https://api.spotify.com/v1/me/playlists";
+//variables for endpoints
+const topItems ="https://accounts.spotify.com/v1/me/top/tracks";
+// values for seeding
+var mode; 
+var travel;
+var shoe;
+
+// Assign variables the values of what is clicked. 
+function showValueM(val){
+    mode = val;
+    console.log(mode);
+}
+function showValueT(val){
+    travel = val;
+    console.log(travel);
+}
+//making sure the values get assigned right lol need this function to apply to all
+function showValueS(val){
+    shoe = val;
+    console.log(shoe);
+}
+
 
 
 
@@ -61,7 +80,7 @@ function requestAuthorization(){
     url += "&redirect_uri=" + encodeURI(redirect_uri);
     url += "&show_dialog=true";
     url += "&scope=user-read-private user-top-read user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private playlist-modify-public";
-    window.location.href = url; // Show Spotify's authorization screen
+    window.location.href = url;
 }
 
 function fetchAccessToken( code ){
@@ -128,6 +147,7 @@ function handleApiResponse(){
     if ( this.status == 200){
         console.log(this.responseText);
         var data = JSON.parse(this.responseText)
+        console.log(data);
         }
     else if ( this.status == 401 ){
         refreshAccessToken()
@@ -137,22 +157,14 @@ function handleApiResponse(){
         alert(this.responseText);
     }    
 }
-// values for seeding
-var mode; 
-var travel;
-var shoe;
+// function for getting users top tracks using users-top-items end point
+function topItems(){
+    let body = {"limit": 20}
+    callApi("GET", url, body, handleApiResponse);
+}
 
-// Assign variables the values of what is clicked. 
-function showValueM(val){
-    mode = val;
-    console.log(mode);
-}
-function showValueT(val){
-    travel = val;
-    console.log(travel);
-}
-//making sure the values get assigned right lol need this function to apply to all
-function showValueS(val){
-    shoe = val;
-    console.log(shoe);
-}
+
+
+
+
+
