@@ -2,7 +2,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Roadtrip Playlist Generator</title>
     <link rel="stylesheet" href="./style.css">
     <script src ="index.js"></script>
@@ -11,28 +10,35 @@
 <body>
     <!-- We can change these values to adjust the playlist -->
     <!-- Energy seed-->
+    <div id="mode"></div>
     <h1> Select how you are traveling: </h1>
-    <button id ="mode" value="0.05" onclick="showValue()"  >Walking</button>
-    <button id ="mode" value="0.14" onclick="showValue()" >Biking</button>
-    <button id ="mode" value="0.28" onclick="showValue()" >Airplane</button>
-    <button id ="mode" value="0.42" onclick="showValue()" >Train</button>
-    <button id ="mode" value="0.56" onclick="showValue()" >Automobile</button>
-    <button id ="mode" value="0.70" onclick="showValue()" >Boat</button>
-    <button id ="mode" value="0.84" onclick="showValue()" >Spaceship</button>
+    <button id ="mode" value="0.05" onclick="showValueM(this.value)" >Walking</button>
+    <button id ="mode" value="0.14" onclick="showValueM(this.value)" >Biking</button>
+    <button id ="mode" value="0.28" onclick="showValueM(this.value)" >Airplane</button>
+    <button id ="mode" value="0.42" onclick="showValueM(this.value)" >Train</button>
+    <button id ="mode" value="0.56" onclick="showValueM(this.value)" >Automobile</button>
+    <button id ="mode" value="0.70" onclick="showValueM(this.value)" >Boat</button>
+    <button id ="mode" value="0.84" onclick="showValueM(this.value)" >Spaceship</button>
+</div>
     <!-- dancibility seed-->
+    <div id="travel"></div>
     <h1> Region you are traveling to: </h1>
-    <button id ="travel" value="0.05" onclick="showValue()" >North East</button>
-    <button id ="travel" value="0.14" onclick="showValue()" >South</button>
-    <button id ="travel" value="0.28" onclick="showValue()" >Midwest</button>
-    <button id ="travel" value="0.42" onclick="showValue()" >West</button>
+    <button id ="travel" value="0.05" onclick="showValueT(this.value)" >North East</button>
+    <button id ="travel" value="0.14" onclick="showValueT(this.value)" >South</button>
+    <button id ="travel" value="0.28" onclick="showValueT(this.value)" >Midwest</button>
+    <button id ="travel" value="0.42" onclick="showValueT(this.value)" >West</button>
+</div>
     <!-- Loudness seed -->
+    <div id ="shoe">
     <h1> Color of your shoes: </h1>
-    <button id ="shoe" value="0.05" onclick="showValue()" >White</button>
-    <button id ="shoe" value="0.14" onclick="showValue()" >Orange</button>
-    <button id ="shoe" value="0.28" onclick="showValue()" >Black</button>
-    <button id ="shoe" value="0.42" onclick="showValue()" >Red</button>
+    <button id ="shoe" value="0.05" onclick="showValueS(this.value)" >White</button>
+    <button id ="shoe" value="0.14" onclick="showValueS(this.value)" >Orange</button>
+    <button id ="shoe" value="0.28" onclick="showValueS(this.value)" >Black</button>
+    <button id ="shoe" value="0.42" onclick="showValueS(this.value)" >Red</button>
+</div>
     <!-- Enter a silly question here -->
-    
+    <button id="submit" onclick="requestAuthorization()"> Create Playlist </button>
+
 
 </body>
 
