@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadtrip Playlist Generator</title>
+    <link rel="stylesheet" href="design.css">
+    <script src ="index.js" ></script>
+     <!--jQuery library--> 
+     <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+     <!--Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+
+</head>
+<body>
+    <header>
+        <div class="container1">
+          <nav class="navbar">
+            <div class="brand-title">Wormhole</div>
+            <a href="#" class="toggle-button">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </a>
+            <div class="navbar-links">
+              <ul>
+                <li><a href="index.html">About</a></li>
+                <li><a href="mainPage.html">Take the quiz!</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
+    
+    <section>
+    <h1 class ="animate__animated animate__bounceInUp"> Welcome to Wormhole!</h1>
+    <p class =" animate__animated animate__bounceInUp"> Space travel or otherwise we handle your playlist creation for the journey!</p>
+    </section>
+    <section>
+        <img src = "assets/driver (2).gif" alt="car">
+    </section>
+    <section>
+        <p> Rather you are driving in circles or traversing wormholes in the galaxy; we use your previous listening habits as well as your quiz answers to create a playlist <Strong>FOR YOU</Strong></p>
+    </section>
+    <section>
+        <img src ="assets/ufo.gif" alt ="ufo">
+    </section>
+    <section>
+        <p> This website utilizes <a href "https://developer.spotify.com/documentation/web-api/">Spotify API</a>. It makes api calls using ajax, while being completely client side. It takes your top tracks over the last 6 months and uses your quiz answers to create the best roadtrip playlist for traveling the starts or the states!</p>
+    </section>
+    <section>
+        <img src ="assets/luggage.gif" alt="luggage">
+    </section>
+    <section>
+        <p> In order for this to work correctly, make sure your local host is the same as mine. If not, go setup a dev account and insert your client secret, id, and redirect URI in the matching variables at the top. In the real world, we would hide these behind php wrapper functions and a server. If using your own spotify dev account, make sure the redirect uri in your browser and your dev profile is the same to make it work. Please let me know if you have any difficulties getting it to work on your machine. I wanted to push myself to try to make something 100% on the client. </p>
+    </section>
+    
+    
+
+
+</body>

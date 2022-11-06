@@ -3,7 +3,7 @@ var redirect_uri = "http://127.0.0.1:5501/mainPage.html";
  
 
 var client_id= "ac4c395f13654db9a9ca2d9035edf3cb"; 
-var client_secret= "062cd903bfce4cfdbd87782b18a0d905"; 
+var client_secret="062cd903bfce4cfdbd87782b18a0d905"; 
 
 var access_token = null;
 var refresh_token = null;
@@ -16,11 +16,16 @@ const TOKEN = "https://accounts.spotify.com/api/token";
 const PLAYLISTS = "https://api.spotify.com/v1/me/playlists";
 const userTop = "https://api.spotify.com/v1/me/top/tracks";
 const recco = "https://api.spotify.com/v1/recommendations";
+var addSongs = "https://api.spotify.com/v1/playlists/{{playlist_id}}/tracks";
 
 //vars for playlist itself
 var seeds = [];
 var oneSeed;
 var recommendations = [];
+var playListId;
+var oneUri;
+var uris=[];
+
 
 function onPageLoad(){
     client_id = localStorage.getItem("client_id");
@@ -35,10 +40,8 @@ function onPageLoad(){
             refreshAccessToken();
         }
         else {
-            //FUNCTIONS GO HERE
-            //have access token, function calls should go here.
+            //start playlist.
             userTopItems();
-            getRecommendations();
         }
      
     }
@@ -78,7 +81,6 @@ function fetchAccessToken( code ){
     body += "&client_secret=" + client_secret;
     callAuthorizationApi(body);
 }
-
 function refreshAccessToken(){
     refresh_token = localStorage.getItem("refresh_token");
     let body = "grant_type=refresh_token";
@@ -86,7 +88,6 @@ function refreshAccessToken(){
     body += "&client_id=" + client_id;
     callAuthorizationApi(body);
 }
-
 function callAuthorizationApi(body){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", TOKEN, true);
@@ -95,7 +96,6 @@ function callAuthorizationApi(body){
     xhr.send(body);
     xhr.onload = handleAuthorizationResponse;
 }
-
 function callApi(method, url, body, callback){
     let xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
@@ -111,23 +111,74 @@ function userTopItems(){
     let body = "limit=3"
     callApi("GET", userTop , body, handleApiResponse)
 }
-
+// get recommendations based on seed tracks and user quiz results. With a limit of 100
 function getRecommendations(){
     //let body= oneSeed;
-    console.log(getRecommendations);
-    let body = "seedtracks="+seeds[0]+seeds[1]+seeds[2];
+    console.log(oneSeed);
+    let body = "?limit=100"+"&seed_tracks="+oneSeed+"&min_danceability"+dance+"&min_energy"+energy+"&min_loudness"+loudness;
     console.log(body);
-    callApi("GET", recco, body, handleRecommendations)
+    callApi("GET", recco+body, null, handleRecommendations)
 }
 
 function createPlaylist(){
-    console.log("playlist");
-    //let body =
-    callApi("POST", PLAYLISTS, null, handleApiResponse);
+    let body = JSON.stringify({
+        "name": "test playlist",
+        "description": "Test playlist for tigerhacks",
+        "public": true
+      });
+    callApi("POST", PLAYLISTS, body, handlePlaylistCreation);
 }
+//parse the recommendations. We will be working with playlist of 100. 
 function handleRecommendations(){
     if ( this.status == 200){
         //this is where we should handle our data
+        console.log(this.responseText);
+        var data = JSON.parse(this.responseText);
+        //sort data
+        for(let i =0; i <= 99; i++){
+            if(i < 99){
+                //+= added an undefined here
+            uris[i]=data.tracks[i].uri;
+            }
+            else{
+                uris[i]=data.tracks[i].uri;
+            }
+            console.log(uris[i])
+            oneUri=uris[i];
+        }
+        
+    
+        console.log(oneUri);
+        createPlaylist();
+    }
+    else if ( this.status == 401 ){
+        refreshAccessToken()
+    }
+    else {
+        console.log(this.responseText);
+        alert(this.responseText);
+    }    
+
+}
+function handlePlaylistCreation(){
+        console.log(this.responseText);
+        var data = JSON.parse(this.responseText);
+        s1 = data.id;
+        playListId = s1;
+        console.log("PLAYLIST ID " + playListId);
+        add();
+        }
+
+function add(){
+    url = addSongs.replace("{{playlist_id}}", playListId);
+    let body = "?"+"&uris="+ uris;
+    console.log(body);
+    callApi("POST", url+body, null, handleAddResponse);
+    
+}
+function handleAddResponse(){
+    if ( this.status == 200){
+        
         console.log(this.responseText);
         var data = JSON.parse(this.responseText);
         }
@@ -138,7 +189,6 @@ function handleRecommendations(){
         console.log(this.responseText);
         alert(this.responseText);
     }    
-
 }
 
 function handleApiResponse(){
@@ -160,7 +210,7 @@ function handleApiResponse(){
         // add the contents of the array to one variable
         oneSeed = seeds[0]+seeds[1]+seeds[2];
         console.log(oneSeed);
-        //getRecommendations();
+        getRecommendations();
         }
     else if ( this.status == 401 ){
         refreshAccessToken()
@@ -195,22 +245,22 @@ function send(){
 
 
 
-/*// values for seeding
-var mode; 
-var travel;
-var shoe;
+// values for seeding
+var dance; 
+var energy;
+var loudness;
 
 // Assign variables the values of what is clicked. 
 function showValueM(val){
-    mode = val;
+     dance = val;
     console.log(mode);
 }
 function showValueT(val){
-    travel = val;
-    console.log(travel);
+    energy = val;
+    console.log(energy);
 }
 //making sure the values get assigned right lol need this function to apply to all
 function showValueS(val){
-    shoe = val;
-    console.log(shoe);
-}*/
+    loudness = val;
+    console.log(loudness);
+}

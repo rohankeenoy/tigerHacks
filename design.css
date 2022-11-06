@@ -1,0 +1,195 @@
+@font-face {
+  font-family: 'Unicorn_School';
+  src: url('assets/UNICORN_SCHOOL.otf') format('opentype');
+}
+* {
+    text-align: center;
+    font-family: 'Unicorn_School';
+    text-transform: uppercase;
+}
+
+.navbar {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(29, 29, 29,0.1);
+  color: white;
+}
+
+.brand-title {
+  
+  padding: 0px 0px;
+  font-family: UNICORN_SCHOOL;
+  text-align: center;
+  float: left;
+  margin:20px;
+  padding: 15px;
+  position:relative; 
+  border:2px;
+  border-style: double;
+  border-color:rgb(255, 255, 255);
+  color: #e8e8e8;
+  font-size: xx-large; 
+}
+
+.navbar-links {
+  height: 100%;
+}
+
+.navbar-links ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+
+.navbar-links li {
+  list-style: none;
+
+}
+
+.navbar-links li a {
+  display: block;
+  text-decoration: none;
+  color: white;
+  padding: 1rem;
+}
+
+header::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.navbar .navbar-links {
+  float: right;
+}
+
+.navbar .navbarlinks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar li {
+  display: inline-flex;
+  margin-left: 50px;
+  padding-top: 40px;
+  padding-bottom: 20px;
+
+  position: relative;
+}
+
+.navbar-links a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.navbar a:hover {
+  color: 6e005a;
+}
+
+.navbar a::before {
+  content: '';
+  display: block;
+  height: 5px;
+  background-color: #ffffff;
+
+  position: absolute;
+  top: 0;
+  width: 0%;
+
+  transition: all ease-in-out 250ms;
+}
+
+.navbar a:hover::before {
+  width: 65%;
+}
+
+/* toggle buttons*/
+
+.toggle-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50px;
+  height: 50px;
+}
+
+.toggle-button .bar {
+  height: 3px;
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+}
+
+@media (max-width: 800px) {
+  .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .toggle-button {
+      display: flex;
+  }
+
+  .navbar-links {
+      display: none;
+      width: 100%;
+  }
+
+  .navbar-links ul {
+      width: 100%;
+      flex-direction: column;
+  }
+
+  .navbar-links ul li {
+      text-align: center;
+  }
+
+  .navbar-links ul li a {
+      padding: .5rem 1rem;
+  }
+
+  .navbar-links.active {
+      display: flex;
+  }
+}
+section {
+  width: 100%;
+  height: 100vh;
+}
+img{
+    padding: 10px;
+    height:175px;
+    width: 150px;
+}
+.quiz{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+body{
+    color: #eeecee;
+  background-image: linear-gradient(45deg, #6e005a 0%, #535353 100%);
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+section img {
+    max-width: 100%; 
+    height: 100%;
+}
+section h1{
+  font-size: 60px;
+}
+section p {
+  font-size: 30px;
+}
